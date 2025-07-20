@@ -1,0 +1,187 @@
+:root {
+  --bg-color: #f0f2f5;
+  --text-color: #000;
+  --chat-bg: #fff;
+  --user-msg: #d1e7dd;
+  --assistant-msg: #f1f1f1;
+}
+
+[data-theme="dark"] {
+  --bg-color: #121212;
+  --text-color: #fff;
+  --chat-bg: #1e1e1e;
+  --user-msg: #2a6b5c;
+  --assistant-msg: #2e2e2e;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: var(--bg-color);
+  color: var(--text-color);
+}
+
+.app-container {
+  display: flex;
+  height: 100vh;
+  transition: background 0.3s;
+}
+
+.sidebar {
+  width: 220px;
+  background-color: #0d6efd;
+  color: white;
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.emoji-header {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.sidebar h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.sidebar p {
+  margin-top: 0.25rem;
+  font-size: 0.95rem;
+  color: #d1eaff;
+}
+
+.clear-button {
+  margin-top: 1.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #ffffff20;
+  border: 1px solid #fff;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.clear-button:hover {
+  background-color: #ffffff30;
+}
+
+.theme-toggle {
+  margin-top: auto;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.chat-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--chat-bg);
+}
+
+.chat-window {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  background-color: var(--chat-bg);
+}
+
+.chat-message {
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  max-width: 75%;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+.chat-message.user {
+  background-color: var(--user-msg);
+  align-self: flex-end;
+  text-align: right;
+}
+
+.chat-message.assistant,
+.chat-message.streaming {
+  background-color: var(--assistant-msg);
+  align-self: flex-start;
+}
+
+.chat-message.typing {
+  font-style: italic;
+  color: #777;
+}
+
+.dots::after {
+  content: '...';
+  animation: blink 1s steps(3, end) infinite;
+}
+
+@keyframes blink {
+  0%, 20% { content: '.'; }
+  40% { content: '..'; }
+  60% { content: '...'; }
+  100% { content: ''; }
+}
+
+.input-area {
+  display: flex;
+  padding: 1rem;
+  background-color: var(--chat-bg);
+  border-top: 1px solid #ccc;
+}
+
+.input-area input {
+  flex: 1;
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.input-area button {
+  margin-left: 0.5rem;
+  padding: 0.75rem 1rem;
+  background-color: #0d6efd;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* 📱 Mobile Responsive */
+@media screen and (max-width: 768px) {
+  .app-container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+  }
+
+  .emoji-header {
+    font-size: 2rem;
+    margin: 0;
+  }
+
+  .sidebar h1,
+  .sidebar p,
+  .theme-toggle,
+  .clear-button {
+    display: none;
+  }
+
+  .chat-message {
+    max-width: 90%;
+  }
+
+  .input-area input {
+    font-size: 0.9rem;
+  }
+}
