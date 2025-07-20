@@ -3,10 +3,7 @@ import './App.css';
 
 const App = () => {
   const [input, setInput] = useState('');
-  const [messages, setMessages] = useState(() => {
-    const saved = localStorage.getItem('tara_chat_history');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [messages, setMessages] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
   const chatRef = useRef(null);
@@ -20,11 +17,31 @@ const App = () => {
     return newId;
   }
 
+  // Load messages from localStorage or fetch from backend
+  useEffect(() => {
+    const saved = localStorage.getItem('tara_chat_history');
+    if (saved) {
+      setMessages(JSON.parse(saved));
+    } else {
+      fetch(`http://localhost:5000/history?user_id=${userId}&thread_id=${threadId}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.history) {
+            setMessages(data.history);
+            localStorage.setItem('tara_chat_history', JSON.stringify(data.history));
+          }
+        })
+        .catch(err => console.error('Failed to load chat history:', err));
+    }
+  }, []);
+
+  // Persist messages to localStorage
   useEffect(() => {
     localStorage.setItem('tara_chat_history', JSON.stringify(messages));
     scrollToBottom();
   }, [messages]);
 
+  // Update theme
   useEffect(() => {
     document.body.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
@@ -114,7 +131,9 @@ const App = () => {
             </div>
           ))}
           {isTyping && (
-            <div className="chat-message assistant typing">Tara is typing<span className="dots">...</span></div>
+            <div className="chat-message assistant typing">
+              Tara is typing<span className="dots">...</span>
+            </div>
           )}
         </div>
 

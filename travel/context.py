@@ -2,16 +2,23 @@
 
 _context_store = {}
 
-def set_context(thread_id, key, value):
-    if thread_id not in _context_store:
-        _context_store[thread_id] = {}
-    _context_store[thread_id][key] = value
+def _make_key(user_id, thread_id):
+    return f"{user_id}:{thread_id}"
 
-def get_context(thread_id, key, default=None):
-    return _context_store.get(thread_id, {}).get(key, default)
+def set_context(user_id, thread_id, key, value):
+    ctx_key = _make_key(user_id, thread_id)
+    if ctx_key not in _context_store:
+        _context_store[ctx_key] = {}
+    _context_store[ctx_key][key] = value
 
-def get_all_context(thread_id):
-    return _context_store.get(thread_id, {})
+def get_context(user_id, thread_id, key, default=None):
+    ctx_key = _make_key(user_id, thread_id)
+    return _context_store.get(ctx_key, {}).get(key, default)
 
-def clear_context(thread_id):
-    _context_store.pop(thread_id, None)
+def get_all_context(user_id, thread_id):
+    ctx_key = _make_key(user_id, thread_id)
+    return _context_store.get(ctx_key, {})
+
+def clear_context(user_id, thread_id):
+    ctx_key = _make_key(user_id, thread_id)
+    _context_store.pop(ctx_key, None)
